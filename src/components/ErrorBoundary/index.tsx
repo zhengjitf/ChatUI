@@ -9,7 +9,7 @@ type FallbackProps = ErrorBoundaryState;
 
 export type ErrorBoundaryProps = {
   FallbackComponent?: React.ComponentType<FallbackProps>;
-  [k: string]: any;
+  onError?: (error: Error, info: React.ErrorInfo) => void;
 };
 
 export class ErrorBoundary extends React.Component<
@@ -22,6 +22,10 @@ export class ErrorBoundary extends React.Component<
   };
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    const { onError } = this.props;
+    if (onError) {
+      onError(error, errorInfo);
+    }
     this.setState({ error, errorInfo });
   }
 
